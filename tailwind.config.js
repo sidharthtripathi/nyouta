@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        templateHeading: ["Lobster", "sans-serif"],
+        templateHeading: ["Pacifico", "cursive"],
       },
     },
   },

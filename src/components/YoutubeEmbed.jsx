@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import youtubeLogo from "../assets/template/youtube.png";
 
 const YoutubeEmbed = () => {
   const [videoUrl, setVideoUrl] = useState("");
@@ -30,24 +31,30 @@ const YoutubeEmbed = () => {
   };
 
   return (
-    <div className="w-full p-20 mx-auto  bg-white  rounded-lg text-center">
+    <div className="w-full mb-20 mx-auto  bg-white  rounded-lg text-center">
       {/* Show Input Field if No URL is Submitted */}
       {!submittedUrl ? (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <input
-            type="text"
-            placeholder="Enter YouTube URL"
-            value={videoUrl}
-            onChange={(e) => setVideoUrl(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <button
-            type="submit"
-            className="bg-pink-500 text-white py-2 rounded-md hover:bg-pink-300 transition"
+        <div className=" w-full flex flex-col items-center justify-center gap-10">
+          <img src={youtubeLogo} alt="Youtube" />
+          <form
+            onSubmit={handleSubmit}
+            className="flex md:w-[400px] flex-col gap-3"
           >
-            Submit
-          </button>
-        </form>
+            <input
+              type="text"
+              placeholder="Enter YouTube URL"
+              value={videoUrl}
+              onChange={(e) => setVideoUrl(e.target.value)}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+              type="submit"
+              className="bg-pink-500 text-white py-2 rounded-md hover:bg-pink-300 transition"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
       ) : (
         <div className="relative group flex items-center justify-center flex-col gap-10">
           {/* Thumbnail Preview */}

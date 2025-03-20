@@ -21,7 +21,7 @@ const TextBlock = ({ label, value, onChange, style, onStyleChange }) => {
 
   return (
     <div className="relative group inline-block mt-2">
-      <p className="text-lg text-blue-300" style={textStyle}>
+      <p className="text-lg " style={textStyle}>
         {value}
       </p>
       <button
@@ -32,7 +32,7 @@ const TextBlock = ({ label, value, onChange, style, onStyleChange }) => {
       </button>
       {/* Editing Drawer */}
       <div
-        className={`fixed left-0 top-0 h-full w-64 bg-white shadow-lg p-5 transition-transform duration-300 ${
+        className={`fixed z-[100] left-0 top-0 text-black h-full w-64 bg-white shadow-lg p-5 transition-transform duration-300 ${
           isEditing ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -41,7 +41,7 @@ const TextBlock = ({ label, value, onChange, style, onStyleChange }) => {
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full p-2 border rounded mb-3"
+          className="w-full text-sm p-2 border rounded mb-3"
         />
         <div className="mb-3">
           <label className="block text-sm font-semibold">Font Size</label>
@@ -51,14 +51,14 @@ const TextBlock = ({ label, value, onChange, style, onStyleChange }) => {
             onChange={(e) =>
               handleStyleChange("fontSize", e.target.value + "px")
             }
-            className="w-full p-2 border rounded"
+            className="w-full text-sm p-2 border rounded"
           />
         </div>
         <div className="mb-3">
           <label className="block text-sm font-semibold">Font Family</label>
           <select
             onChange={(e) => handleStyleChange("fontFamily", e.target.value)}
-            className="w-full p-2 border rounded"
+            className="w-full text-sm p-2 border rounded"
           >
             <option value="Arial">Arial</option>
             <option value="Georgia">Georgia</option>
@@ -75,7 +75,7 @@ const TextBlock = ({ label, value, onChange, style, onStyleChange }) => {
                 textStyle.fontWeight === "bold" ? "normal" : "bold"
               )
             }
-            className="p-2 border rounded w-1/3"
+            className="p-2 text-sm border rounded w-1/3"
           >
             B
           </button>
@@ -86,7 +86,7 @@ const TextBlock = ({ label, value, onChange, style, onStyleChange }) => {
                 textStyle.fontStyle === "italic" ? "normal" : "italic"
               )
             }
-            className="p-2 border rounded w-1/3"
+            className="p-2 text-sm border rounded w-1/3"
           >
             I
           </button>
@@ -639,6 +639,44 @@ const EditableText = ({ initialText }) => {
 };
 
 const RSVPComponent = () => {
+  const defaultStyle = {
+    fontSize: "18px",
+    fontWeight: "normal",
+    fontStyle: "normal",
+    fontFamily: "Arial",
+  };
+
+  // Initial names array
+  const initialNames = [
+    "Enter Name 1",
+    "Enter Name 2",
+    "Enter Name 3",
+    "Enter Name 4",
+    "Enter Name 5",
+    "Enter Name 6",
+    "Enter Name 7",
+    "Enter Name 8",
+    "Enter Name 9",
+  ];
+
+  // Create the initial details state from the names array
+  const initialDetails = {};
+  initialNames.forEach((name, index) => {
+    initialDetails[`name${index + 1}`] = {
+      text: name,
+      style: { ...defaultStyle },
+    };
+  });
+  const [details, setDetails] = useState(initialDetails);
+
+  const updateDetail = (key, value) => {
+    setDetails({ ...details, [key]: { ...details[key], text: value } });
+  };
+
+  const updateStyle = (key, style) => {
+    setDetails({ ...details, [key]: { ...details[key], style } });
+  };
+
   return (
     <div className="rsvp bg-white py-10">
       <div className="top_names w-full flex py-10 px-[10%] items-center justify-between">
@@ -648,12 +686,25 @@ const RSVPComponent = () => {
             WELCOME BY
           </h2>
           <div className="flex flex-col items-center justify-center font-semibold text-xl text-blue-400">
-            {[1, 2, 3].map((index) => (
-              <EditableText
-                key={index}
-                initialText={`EDIT NAME HERE ${index}`}
-              />
-            ))}
+            {Object.keys(details)
+              .filter((key, index) => {
+                const nameIndex = parseInt(key.replace("name", ""));
+                return nameIndex >= 0 && nameIndex <= 3; // Using name4 through name7 (indices 3-6)
+              })
+              .map((key) => (
+                <div
+                  key={key}
+                  className="flex flex-col items-center justify-center font-semibold text-blue-400"
+                >
+                  <TextBlock
+                    label={`Name ${key.replace("name", "")}`}
+                    value={details[key].text}
+                    onChange={(val) => updateDetail(key, val)}
+                    style={details[key].style}
+                    onStyleChange={(style) => updateStyle(key, style)}
+                  />
+                </div>
+              ))}
           </div>
         </div>
 
@@ -666,12 +717,25 @@ const RSVPComponent = () => {
             SPECIAL REQUEST
           </h2>
           <div className="flex flex-col items-center justify-center font-semibold text-xl text-blue-400">
-            {[1, 2, 3].map((index) => (
-              <EditableText
-                key={index}
-                initialText={`EDIT NAME HERE ${index}`}
-              />
-            ))}
+            {Object.keys(details)
+              .filter((key, index) => {
+                const nameIndex = parseInt(key.replace("name", ""));
+                return nameIndex >= 4 && nameIndex <= 6; // Using name4 through name7 (indices 3-6)
+              })
+              .map((key) => (
+                <div
+                  key={key}
+                  className="flex flex-col items-center justify-center font-semibold text-blue-400"
+                >
+                  <TextBlock
+                    label={`Name ${key.replace("name", "")}`}
+                    value={details[key].text}
+                    onChange={(val) => updateDetail(key, val)}
+                    style={details[key].style}
+                    onStyleChange={(style) => updateStyle(key, style)}
+                  />
+                </div>
+              ))}
           </div>
         </div>
       </div>
@@ -683,12 +747,25 @@ const RSVPComponent = () => {
             SPECIAL REQUEST
           </h2>
           <div className="flex flex-col items-center justify-center font-semibold text-xl text-blue-400">
-            {[1, 2, 3].map((index) => (
-              <EditableText
-                key={index}
-                initialText={`EDIT NAME HERE ${index}`}
-              />
-            ))}
+            {Object.keys(details)
+              .filter((key, index) => {
+                const nameIndex = parseInt(key.replace("name", ""));
+                return nameIndex >= 7 && nameIndex <= 9; // Using name4 through name7 (indices 3-6)
+              })
+              .map((key) => (
+                <div
+                  key={key}
+                  className="flex flex-col items-center justify-center font-semibold text-blue-400"
+                >
+                  <TextBlock
+                    label={`Name ${key.replace("name", "")}`}
+                    value={details[key].text}
+                    onChange={(val) => updateDetail(key, val)}
+                    style={details[key].style}
+                    onStyleChange={(style) => updateStyle(key, style)}
+                  />
+                </div>
+              ))}
           </div>
         </div>
       </div>

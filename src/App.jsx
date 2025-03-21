@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import NewTemplate from "./pages/templates/NewTemplate";
 import Home from "./pages/Home";
 import Footer from "./components/Footer";
+import Template01 from "./pages/templates/Template01";
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
         {/* Navbar */}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/create-template/template01" element={<NewTemplate />} />
+          <Route path="/create-template/template01" element={<Template01 />} />
         </Routes>
         <Footer />
       </BrowserRouter>

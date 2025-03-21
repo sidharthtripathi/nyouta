@@ -8,7 +8,6 @@ import logo from "../../assets/template/img80.jpg";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import YoutubeEmbed from "../../components/YoutubeEmbed";
-import TemplatePricing from "../../components/TemplatePricing";
 
 const TextBlock = ({ label, value, onChange, style, onStyleChange }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -108,7 +107,6 @@ const NewTemplate = () => {
   return (
     <div>
       <div>
-        <TemplatePricing />
         <WeddingVenueCard />
         <RSVPComponent />
         <WeddingInvitation />

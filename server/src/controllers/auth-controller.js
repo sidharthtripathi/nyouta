@@ -6,6 +6,10 @@ import genertedRefreshToken from '../utils/genertedRefreshToken.js'
 import generatedOtp from '../utils/generatedOtp.js'
 import sendEmail from '../config/sendEmail.js'
 import { validateRegistration, validatelogin } from "../utils/validation.js";
+import { oauth2Client } from "../config/google-config.js";
+
+// import axios from 'axios'
+
 
 
 // register controller
@@ -66,6 +70,74 @@ export async function registerController(req, res) {
     });
   }
 }
+
+
+export async function googleSignupController(req,res){
+    try {
+        const { code } = req.query;
+        const googleRes = await oauth2Client.getToken(code)
+        oauth2Client.setCredentials(googleRes.tokens)
+        const googleUser = await oauth2Client.request(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`)
+        const { name, email } = googleUser.data
+
+        const user = await userModel.findOne({ email })
+
+        if(user){
+            return res.status(400).json({
+                message : "User already registerd with this email",
+                error : true,
+                success : false
+            })
+        }
+        const payload = {
+            name,
+            email,
+            google_id : googleUser.id
+        }
+
+        const newUser = new userModel(payload)
+        const save = await newUser.save()
+
+
+        const VerifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${save?._id}`
+
+        const verifyEmail = await sendEmail({
+            sendTo : email,
+            subject : "Verify email from wedding Team ",
+            html : verifyEmailTemplate({
+                name,
+                url : VerifyEmailUrl
+            })
+        })
+        const accesstoken = await generatedAccessToken(user._id)
+        const refreshToken = await genertedRefreshToken(user._id)
+   
+        const updateUser = await userModel.findByIdAndUpdate(user?._id,{
+            last_login_date : new Date()
+        })
+   
+        const cookiesOption = {
+            httpOnly : true,
+            secure : true,
+            sameSite : "None"
+        }
+        res.cookie('accessToken',accesstoken,cookiesOption)
+        res.cookie('refreshToken',refreshToken,cookiesOption)
+   
+        return res.json({
+            message : "Login successfully",
+            success : true,
+            data : {
+                accesstoken,
+                refreshToken
+            }
+        })
+
+    } catch (error) {
+        
+    }
+}
+
 
 // verify email controller
 export async function verifyEmailController(req,res){

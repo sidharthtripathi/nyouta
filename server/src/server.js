@@ -7,6 +7,8 @@ import connectDB from './db/connect.js'
 import dotenv from "dotenv";
 import helmet from "helmet";
 import authRouter from './routers/auth-router.js'
+
+
 dotenv.config(); // Load environment variables
 
 
@@ -20,6 +22,7 @@ app.use(morgan("tiny"));
 
 app.use(cors({
     origin: '*', // Replace with your frontend URL
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true // Allow cookies to be sent with requests
 }));
 
@@ -40,6 +43,7 @@ app.use(helmet({
 // });
 
 app.use('/api/v1/auth', authRouter);
+
 
 const PORT = process.env.PORT || 5000;
 

@@ -1,19 +1,29 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import LandingPage from "./pages/LandingPage";
+import WeddingWebsitUrl from "./pages/WeddingWebsitUrl";
+import AuthCheck from './components/AuthCheck';
+import LoginRegister from './pages/LoginRegister';
+
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/landing" element = {<LandingPage/>} />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<LoginRegister />} />
+        <Route path="/register" element={<LoginRegister />} />
+        <Route path="/wedding-website" element={
+          <AuthCheck>
+            <WeddingWebsitUrl />
+          </AuthCheck>
+        } />
+      
+
+      </Routes>
+    
+    </BrowserRouter>
   );
 }
 

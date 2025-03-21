@@ -1,75 +1,120 @@
-import React from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../utils/Store/slices/authSlice';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+    User,
+} from "lucide-react";
 import logo from "../assets/images/nyouta-logo2.jpg";
-import { ShoppingBag, User, LogOut } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../utils/Store/slices/authSlice";
+import { clearUserData } from '../utils/Store/slices/userSlice';
+import defaultProfileImage from '../assets/images/default-image.png';
 
-const Navbar = () => {
-  const { user, isAuthenticated } = useSelector(state => state.auth);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
+const navItems = [
+    {
+        label: "Home",
+        url: "/",
+    },
+    {
+        label: "Wedding Website",
+        url: "/create-wedding-website",
+    }
+];
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login');
-  };
+export default function Navbar() {
+    const [isScrolled, setIsScrolled] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { profileImage } = useSelector(state => state.user);
+    const { isAuthenticated } = useSelector(state => state.auth);
 
-  return (
-    <div className="flex flex-col sticky top-0 z-50 bg-white border border-[#af7d32]">
-      {/* Top Banner */}
-      <div className="h-8 flex justify-between items-center px-6 lg:px-16 bg-[#FAF0DC]">
-        <div className="bg-[#af7d32] rounded-b-2xl text-white flex items-center justify-center px-4 py-1 tracking-widest text-sm sm:text-lg">
-          NYOUTA
-        </div>
-      </div>
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 0);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
-      {/* Main Navbar */}
-      <div className="flex justify-between items-center px-6 lg:px-16 py-4">
-        {/* Logo + Wedding Website Link */}
+    const handleLogout = () => {
+        // Clear local storage
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+
+        // Clear Redux state
+        dispatch(clearUserData());
+        dispatch(logout());
+
+        // Navigate to login
+        navigate('/login');
+    };
+
+    return (
         <div className="flex flex-col">
-          <Link to="/">
-            <img src={logo} alt="Nyouta Logo" className="w-48 h-auto" />
-          </Link>
-          <Link
-            to="/wedding-website"
-            className="mt-4 text-lg text-[#7d5a2a] font-medium hover:text-[#af7d32]"
-          >
-            Wedding Website
-          </Link>
-        </div>
-
-        {/* Login & Cart Icons on the Right */}
-        <div className="flex items-center space-x-6">
-          <Link to="/cart" className="text-[#7d5a2a] hover:text-[#af7d32]">
-            <ShoppingBag size={22} />
-          </Link>
-          {isAuthenticated && user ? (
-            <div className="flex items-center space-x-4">
-              <span className="text-[#7d5a2a] font-medium">
-                {user.name}
-              </span>
-              <button
-                onClick={handleLogout}
-                className="text-[#d33b3b] hover:text-[#af7d32] font-medium flex items-center"
-              >
-                <LogOut className="mr-1" size={20} />
-                Logout
-              </button>
+            <div className="h-[30px] flex justify-between px-6 lg:px-56 sm:px-8 bg-[#FAF0DC]">
+                <div className="bg-[#af7d32] rounded-b-2xl text-white font-avalonN ms-4 sm:ms-0 flex items-center justify-center px-2 sm:px-4 tracking-widest text-lg sm:text-2xl font-bold">
+                    NYOUTA
+                </div>
+                <div className="sm:flex hidden items-center sm:me-0 lg:me-10">
+                    <marquee className="text-[#643C28] font-extrabold text-sm sm:text-base lg:text-lg">
+                        Celebrate Your Event with Savings – Shop Now for Discounts! | Get Ready for Your Event – Special Discounts Inside! | Plan Perfect Weddings at a Discount – Limited Time Offer! | Show us your selfie with our portal and unlock a special discount just for you!
+                    </marquee>
+                </div>
             </div>
-          ) : !isAuthenticated && location.pathname !== '/login' && (
-            <Link
-              to="/login"
-              className="text-[#d33b3b] hover:text-[#af7d32] font-medium flex items-center"
-            >
-              <User className="mr-1" size={20} /> Login
-            </Link>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
 
-export default Navbar;
+            <header className={`sticky top-0 z-50 w-full transition-all border-b-2 border-primary ${isScrolled ? "bg-white shadow-md" : "bg-white"}`}>
+                <div className="container mx-auto">
+                    <div className="flex h-18 items-center justify-between px-4">
+                        <Link to="/" className="flex items-center py-2 lg:pl-12 gap-2">
+                            <img className="lg:w-56 w-36" src={logo} alt="logo-imgh" />
+                        </Link>
+
+                        <div className="flex items-center gap-1 lg:gap-4">
+                            <a
+                                href="/join-e-nyouta"
+                                className="text-pink-600 font-avalonN hidden lg:flex leading-none hover:underline text-lg font-bold"
+                            >
+                                Join E-Nyouta
+                                <br />
+                                Share Memories
+                            </a>
+
+                            <button
+                                onClick={() => isAuthenticated ? handleLogout() : navigate('/login')}
+                                className="flex items-center gap-1 rounded-md p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-brown-500 focus:ring-offset-2"
+                            >
+                                {isAuthenticated ? (
+                                    <img
+                                        src={profileImage || defaultProfileImage}
+                                        alt="profile-pic"
+                                        className="w-10 h-10 rounded-full"
+                                    />
+                                ) : (
+                                    <User size={27} />
+                                )}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="hidden lg:flex py-2 justify-center">
+                        <ul className="flex gap-8 px-8 justify-center items-center text-base font-bold">
+                            {navItems.map((item, index) => (
+                                <li
+                                    key={index}
+                                    className="relative py-2"
+                                >
+                                    <Link
+                                        to={item.url}
+                                        className="hover:text-primary hover:border-b-2 border-primary hover:font-thin flex items-center gap-3"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </header>
+        </div>
+    );
+}

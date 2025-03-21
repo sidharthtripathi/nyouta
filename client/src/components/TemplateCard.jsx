@@ -1,60 +1,43 @@
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { createWeddingWebsite, updateWeddingWebsite } from "../utils/Store/slices/weddingTemplateSlice";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
-const TemplateCard = ({ template, id, image,setShowForm,setId }) => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const user = localStorage.getItem('user');
-    const handleTemplateClick = async (id) => {
-      if(!user || user === undefined || user === null) {
-        navigate('/login');
-      }
-      if (!user.isWebsiteCreated) {
-        const res = await dispatch(createWeddingWebsite(id));
-        if(res.status===401||res.status===403){
-          navigate('/login');
-        }
-        else if (res.type === 'weddingtemplates/createWeddingWebsite/fulfilled') {
-          console.log(res);
-          navigate(`/weds/${res?.payload?.slug}`);
-        }
-      } else {
-        const res = await dispatch(updateWeddingWebsite(id));
-        if(res.status===401||res.status===403){
-          navigate('/login');
-        }
-        else if (res.type === 'weddingtemplates/updateWeddingWebsite/fulfilled') {
-          navigate(`/weds/${res?.payload?.slug}`);
-        }
-      }
-    }
-    const handleUpdatedetails = () => {
-      // setShowForm(true);   // Enable it when u want to use form functionality
-      setId(id);
-      if(localStorage.getItem('token')){
-        navigate('/edit-wedding-website/01')
-      }
-      else navigate('/login')
-    }
-    const handleCreate = () => {
-      handleTemplateClick(id);
-    }
-    return (
-      <div
-        className="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200 cursor-pointer relative group"
-      >
-        <div className="p-4">
-          <div className="relative">
-            <img src={image} alt="Template" className="w-full h-auto transition-all duration-300 group-hover:opacity-50" />
-            {/* Create Button */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:translate-y-0 translate-y-10 transition-all duration-500">
-              <button className="bg-gray-500 text-white py-2 px-4 mr-3" onClick={handleUpdatedetails}>Update Details</button>
-              <button className="bg-gray-500 text-white py-2 px-4" onClick={handleCreate}>Create</button>
-            </div>
-          </div>
+const TemplateCard = ({ template }) => {
+  const navigate = useNavigate();
+
+  const handleTemplateClick = () => {
+    navigate(`/wedding-website/template/${template.id}`);
+  };
+
+  return (
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer"
+      onClick={handleTemplateClick}
+    >
+      <div className="relative h-48">
+        <img
+          src={template.thumbnail || "https://via.placeholder.com/400x300"}
+          alt={template.name}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+          <span className="text-white text-lg font-semibold">Preview Template</span>
         </div>
       </div>
-    );
-  };
-  export default TemplateCard;
+      <div className="p-4">
+        <h3 className="text-xl font-semibold text-gray-800 mb-2">{template.name}</h3>
+        <p className="text-gray-600 text-sm mb-4">{template.description}</p>
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-gray-500">Category: {template.category}</span>
+          <button className="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300">
+            Use Template
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export default TemplateCard;

@@ -1,4 +1,12 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-    themes: light --default
-  }
+  themes: light --default;
+}
+@import url("https://fonts.googleapis.com/css2?family=Alice&display=swap");
+
+@font-face {
+  font-family: "AmoresaAged";
+  src: url("/public/fonts/Amoresa-Aged.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}

@@ -13,6 +13,7 @@ export default {
       },
       colors: {
         pricingColor: "#000080",
+        primaryColor: "#563B0E",
       },
     },
   },

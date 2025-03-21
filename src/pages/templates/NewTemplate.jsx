@@ -8,6 +8,7 @@ import logo from "../../assets/template/img80.jpg";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import YoutubeEmbed from "../../components/YoutubeEmbed";
+import TemplatePricing from "../../components/TemplatePricing";
 
 const TextBlock = ({ label, value, onChange, style, onStyleChange }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -21,7 +22,7 @@ const TextBlock = ({ label, value, onChange, style, onStyleChange }) => {
 
   return (
     <div className="relative group inline-block mt-2">
-      <p className="text-lg " style={textStyle}>
+      <p className="text-lg font-templateBody text-blue-400 " style={textStyle}>
         {value}
       </p>
       <button
@@ -107,12 +108,13 @@ const NewTemplate = () => {
   return (
     <div>
       <div>
+        <TemplatePricing />
         <WeddingVenueCard />
         <RSVPComponent />
         <WeddingInvitation />
         <WeddingInvitationPage />
-        <div className="nyouta w-full flex flex-col gap-20 items-center justify-center py-20">
-          <h1 className="font-templateHeading font-bold text-6xl text-blue-400">
+        <div className="nyouta w-full flex flex-col gap-10 items-center justify-center py-20">
+          <h1 className="font-templateHeadings lg:text-5xl font-bold text-6xl text-blue-400">
             Creating Special for Special Day.
           </h1>
           <img className=" h-[100px] w-[200px]" src={logo} alt="" />
@@ -402,7 +404,7 @@ const WeddingInvitationPage = () => {
       {/* RSVP Section */}
       <div className="py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-7xl text-pink-600 font-templateHeading text-center font-templateFont font-bold mb-20">
+          <h2 className="text-7xl text-pink-600 font-templateHeadings lg:text-5xl text-center font-templateFont font-bold mb-20">
             RSVP
           </h2>
 
@@ -546,7 +548,7 @@ const PhotoGallery = () => {
 
   return (
     <div className="py-20 bg-white flex flex-col gap-5">
-      <h2 className="text-3xl md:text-7xl font-templateHeading text-pink-600 text-center font-templateFont font-bold mb-8">
+      <h2 className="text-3xl md:text-7xl font-templateHeadings text-pink-600 text-center font-templateFont font-bold mb-8">
         Photo Gallery
       </h2>
 
@@ -580,7 +582,7 @@ const PhotoGallery = () => {
 
 const Message = () => {
   const [text, setText] = useState(
-    "Your presence will make\nwedding day even more special\nand unforgettable"
+    "Your presence will make\n\nwedding day even more special\n\nand unforgettable"
   );
   const [isEditing, setIsEditing] = useState(false);
 
@@ -593,7 +595,7 @@ const Message = () => {
       <p
         contentEditable={isEditing}
         suppressContentEditableWarning
-        className="text-pink-600 font-templateHeading text-lg md:text-6xl font-templateFont font-bold capitalize outline-none"
+        className="text-pink-600 font-templateHeadings leading-relaxed text-lg md:text-5xl font-templateFont font-bold capitalize outline-none"
         onBlur={() => setIsEditing(false)}
         onInput={handleTextChange}
       >
@@ -682,8 +684,8 @@ const RSVPComponent = () => {
       <div className="top_names w-full flex py-10 px-[10%] items-center justify-between">
         {/* Welcome Section */}
         <div className="flex flex-col gap-5 items-center justify-center">
-          <h2 className="text-pink-500 font-templateHeading font-semibold text-3xl">
-            WELCOME BY
+          <h2 className="text-pink-500 font-templateHeadings lg:text-5xl font-semibold text-3xl ">
+            Welcome By
           </h2>
           <div className="flex flex-col items-center justify-center font-semibold text-xl text-blue-400">
             {Object.keys(details)
@@ -713,8 +715,8 @@ const RSVPComponent = () => {
 
         {/* Special Request Section */}
         <div className="flex flex-col gap-5 items-center justify-center">
-          <h2 className="text-pink-500 font-templateHeading font-semibold text-3xl">
-            SPECIAL REQUEST
+          <h2 className="text-pink-500 font-templateHeadings lg:text-5xl font-semibold text-3xl">
+            Special Request
           </h2>
           <div className="flex flex-col items-center justify-center font-semibold text-xl text-blue-400">
             {Object.keys(details)
@@ -743,8 +745,8 @@ const RSVPComponent = () => {
       {/* Bottom Special Request Section */}
       <div className="bottom_names w-full flex items-center justify-center">
         <div className="flex flex-col gap-5 items-center justify-center">
-          <h2 className="text-pink-500 font-templateHeading font-semibold text-3xl">
-            SPECIAL REQUEST
+          <h2 className="text-pink-500 font-templateHeadings lg:text-4xl font-semibold text-3xl">
+            Special Request
           </h2>
           <div className="flex flex-col items-center justify-center font-semibold text-xl text-blue-400">
             {Object.keys(details)
@@ -845,8 +847,8 @@ const WeddingVenueCard = () => {
       {/* Content container */}
       <div className="z-10 text-center max-w-lg mx-auto flex flex-col gap-4 h-full items-center justify-center">
         {/* Static venue title */}
-        <h1 className="text-5xl font-templateHeading font-semibold text-pink-500 mb-4">
-          WEDDING VENUE
+        <h1 className="text-5xl font-templateHeadings font-semibold text-pink-500 mb-4">
+          Wedding Venue
         </h1>
 
         {/* Editable venue address */}

@@ -8,7 +8,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        templateHeading: ["Pacifico", "cursive"],
+        templateHeadings: ["AmoresaAged", "sans-serif"],
+        templateBody: ["Alice", "serif"],
+      },
+      colors: {
+        pricingColor: "#000080",
       },
     },
   },

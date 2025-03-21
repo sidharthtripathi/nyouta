@@ -1,48 +1,108 @@
-const TemplatePricing = () => {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-12">
-      <h2 className="text-4xl font-bold text-gray-800 mb-8">
-        Choose Your Plan
-      </h2>
-      <div className="grid md:grid-cols-2 gap-8">
-        {/* Free Plan */}
-        <div
-          className="bg-white p-8 rounded-2xl shadow-lg text-center border border-gray-300 flex flex-col items-center justify-between 
-            transform transition duration-300 hover:scale-105 hover:shadow-2xl"
-        >
-          <h3 className="text-2xl font-semibold text-gray-800">Free Plan</h3>
-          <p className="text-gray-600 mt-2">Basic Wedding Card</p>
-          <h4 className="text-3xl font-bold text-green-600 mt-4">₹0</h4>
-          <ul className="text-gray-700 text-left mt-6 space-y-3">
-            <li>✅ Basic wedding details</li>
-            <li>✅ Single-page wedding card</li>
-            <li>✅ Limited customization</li>
-          </ul>
-          <button className="mt-6 bg-gray-700 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition">
-            Get Started
-          </button>
-        </div>
+import { useState } from "react";
+import { X } from "lucide-react"; // Importing Lucide React for icons
 
-        {/* Premium Plan */}
-        <div
-          className="bg-white p-8 rounded-2xl shadow-lg text-center border border-pink-500 flex flex-col items-center justify-between 
-            transform transition duration-300 hover:scale-105 hover:shadow-2xl"
+const TemplatePricing = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
+
+  const handleSelectPlan = (plan) => {
+    setSelectedPlan(plan);
+  };
+
+  return (
+    <div className="flex justify-center items-center min-h-[100px] z-[200]">
+      {/* Fixed Navbar */}
+      <nav className=" w-full bg-white shadow-md py-4 px-6 flex  justify-end">
+        <button
+          onClick={() => setIsOpen(true)}
+          className="bg-red-300 font-templateBody font-semibold text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-400"
         >
-          <h3 className="text-2xl font-semibold text-gray-800">Premium Plan</h3>
-          <p className="text-gray-600 mt-2">Create a complete wedding card</p>
-          <h4 className="text-3xl font-bold text-pink-600 mt-4">₹999</h4>
-          <ul className="text-gray-700 text-left mt-6 space-y-3">
-            <li>🚀 YouTube video embed</li>
-            <li>📸 Photo gallery</li>
-            <li>📍 Venue location integration</li>
-            <li>💌 RSVP management</li>
-            <li>✨ Advanced customization</li>
-          </ul>
-          <button className="mt-6 bg-pink-600 text-white px-6 py-3 rounded-lg hover:bg-pink-700 transition">
-            Upgrade Now
-          </button>
+          Share
+        </button>
+      </nav>
+
+      {isOpen && (
+        <div className="fixed z-[999] inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg animate-fadeIn relative">
+            {/* Close Button (Cross Icon) */}
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            >
+              <X size={24} />
+            </button>
+
+            <h2 className="text-3xl text-pricingColor font-templateBody font-bold mb-6 text-center">
+              Choose Your Plan
+            </h2>
+            <div className="grid md:grid-cols-3 gap-4">
+              {/* Free Plan */}
+              <div
+                className={`border z-[1000] min-h-[400px] min-w-[300px] flex flex-col items-center justify-between p-10 rounded-lg shadow-sm text-center cursor-pointer ${
+                  selectedPlan === "Free" ? "bg-gray-300" : "bg-gray-100"
+                }`}
+                onClick={() => handleSelectPlan("Free")}
+              >
+                <h3 className="text-2xl text-green-600 font-semibold font-templateBody">
+                  Free Plan
+                </h3>
+                <div className="flex flex-col items-center justify-center gap-3">
+                  <p className="text-gray-600 mt-2">Only 3 Pages Allowed</p>
+                  <p className="text-gray-600">✔ Images Allowed</p>
+                </div>
+                <h4 className="text-2xl font-bold text-green-600 mt-4">₹0</h4>
+              </div>
+              {/* 551 INR Plan */}
+              <div
+                className={`border min-h-[400px] min-w-[300px] flex flex-col items-center justify-between p-10 rounded-lg shadow-sm text-center cursor-pointer ${
+                  selectedPlan === "Standard" ? "bg-blue-300" : "bg-blue-100"
+                }`}
+                onClick={() => handleSelectPlan("Standard")}
+              >
+                <h3 className="text-2xl text-blue-600  font-semibold font-templateBody">
+                  Standard Plan
+                </h3>
+                <div className="flex flex-col items-center justify-center gap-3">
+                  <p className="text-gray-600 mt-2">All Pages Allowed</p>
+                  <p className="text-gray-600">✔ Images & Videos Allowed</p>
+                </div>
+                <h4 className="text-2xl font-bold text-blue-600 mt-4">₹551</h4>
+              </div>
+              {/* 1001 INR Plan */}
+              <div
+                className={`border min-h-[400px] min-w-[300px] flex flex-col items-center justify-between p-10 rounded-lg shadow-sm text-center cursor-pointer ${
+                  selectedPlan === "Premium" ? "bg-yellow-300" : "bg-yellow-100"
+                }`}
+                onClick={() => handleSelectPlan("Premium")}
+              >
+                <h3 className="text-2xl text-yellow-600 font-semibold font-templateBody">
+                  Premium Plan
+                </h3>
+                <div className="flex flex-col items-center justify-center gap-3">
+                  <p className="text-gray-600 mt-2">All Features Included</p>
+                  <p className="text-gray-600">✔ YouTube & Photo/Video Embed</p>
+                  <p className="text-gray-600">
+                    ✔ All Pages with Complete Details
+                  </p>
+                </div>
+                <h4 className="text-2xl font-bold text-yellow-600 mt-4">
+                  ₹1001
+                </h4>
+              </div>
+            </div>
+            {selectedPlan && (
+              <div className=" flex flex-col items-center justify-center gap-2">
+                <p className="mt-4 text-center font-templateBody text-pricingColor text-lg font-semibold">
+                  Selected Plan: {selectedPlan}
+                </p>
+                <button className="bg-red-300 font-templateBody font-semibold text-white px-4 py-2 rounded-lg shadow-lg hover:bg-red-400">
+                  Proceed to Payment
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

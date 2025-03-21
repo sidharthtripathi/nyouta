@@ -1,5 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Alice&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "AmoresaAged";
+  src: url("/public/fonts/Amoresa-Aged.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}

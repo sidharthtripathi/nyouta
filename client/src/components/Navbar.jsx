@@ -1,75 +1,73 @@
-import React from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../utils/Store/slices/authSlice';
-import logo from "../assets/images/nyouta-logo2.jpg";
-import { ShoppingBag, User, LogOut } from "lucide-react";
+import { clearUserData } from '../utils/Store/slices/userSlice';
+import { setUser } from '../utils/Store/slices/authSlice';
+import defaultProfileImage from '../assets/images/default-image.png';
 
-const Navbar = () => {
-  const { user, isAuthenticated } = useSelector(state => state.auth);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
+export default function Navbar() {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login');
-  };
+    const { profileImage } = useSelector(state => state.user);
+    const { isAuthenticated } = useSelector(state => state.auth);
 
-  return (
-    <div className="flex flex-col sticky top-0 z-50 bg-white border border-[#af7d32]">
-      {/* Top Banner */}
-      <div className="h-8 flex justify-between items-center px-6 lg:px-16 bg-[#FAF0DC]">
-        <div className="bg-[#af7d32] rounded-b-2xl text-white flex items-center justify-center px-4 py-1 tracking-widest text-sm sm:text-lg">
-          NYOUTA
-        </div>
-      </div>
+    const handleLogout = () => {
+        // Clear local storage
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
 
-      {/* Main Navbar */}
-      <div className="flex justify-between items-center px-6 lg:px-16 py-4">
-        {/* Logo + Wedding Website Link */}
-        <div className="flex flex-col">
-          <Link to="/">
-            <img src={logo} alt="Nyouta Logo" className="w-48 h-auto" />
-          </Link>
-          <Link
-            to="/wedding-website"
-            className="mt-4 text-lg text-[#7d5a2a] font-medium hover:text-[#af7d32]"
-          >
-            Wedding Website
-          </Link>
-        </div>
+        // Clear Redux state
+        dispatch(clearUserData());
+        dispatch(setUser(null));
 
-        {/* Login & Cart Icons on the Right */}
-        <div className="flex items-center space-x-6">
-          <Link to="/cart" className="text-[#7d5a2a] hover:text-[#af7d32]">
-            <ShoppingBag size={22} />
-          </Link>
-          {isAuthenticated && user ? (
-            <div className="flex items-center space-x-4">
-              <span className="text-[#7d5a2a] font-medium">
-                {user.name}
-              </span>
-              <button
-                onClick={handleLogout}
-                className="text-[#d33b3b] hover:text-[#af7d32] font-medium flex items-center"
-              >
-                <LogOut className="mr-1" size={20} />
-                Logout
-              </button>
+        // Navigate to login
+        navigate('/login');
+    };
+
+    return (
+        <nav className="bg-white shadow-lg">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between h-16">
+                    <div className="flex">
+                        <div className="flex-shrink-0 flex items-center">
+                            <Link to="/" className="text-xl font-bold text-gray-800">
+                                Wedding Website
+                            </Link>
+                        </div>
+                        <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                            <Link to="/wedding-website" className="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent hover:border-red-500">
+                                Home
+                            </Link>
+                            {/* Add more navigation links as needed */}
+                        </div>
+                    </div>
+
+                    <div className="flex items-center">
+                        {isAuthenticated ? (
+                            <div className="ml-3 relative flex items-center space-x-4">
+                                <img
+                                    className="h-8 w-8 rounded-full object-cover"
+                                    src={profileImage || defaultProfileImage}
+                                    alt="Profile"
+                                />
+                                <button
+                                    onClick={handleLogout}
+                                    className="text-gray-500 hover:text-red-500 px-3 py-2 rounded-md text-sm font-medium"
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        ) : (
+                            <Link
+                                to="/login"
+                                className="text-gray-500 hover:text-red-500 px-3 py-2 rounded-md text-sm font-medium"
+                            >
+                                Login
+                            </Link>
+                        )}
+                    </div>
+                </div>
             </div>
-          ) : !isAuthenticated && location.pathname !== '/login' && (
-            <Link
-              to="/login"
-              className="text-[#d33b3b] hover:text-[#af7d32] font-medium flex items-center"
-            >
-              <User className="mr-1" size={20} /> Login
-            </Link>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Navbar;
+        </nav>
+    );
+}

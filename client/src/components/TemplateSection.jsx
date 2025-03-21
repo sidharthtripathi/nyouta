@@ -1,20 +1,11 @@
-import React, { useState } from "react";
-import TemplateCard from "./TemplateCard";
+import React from 'react';
+import TemplateCard from './TemplateCard';
 
 const TemplateSection = ({ weddingTemplates }) => {
-  const [showForm, setShowForm] = useState(false);
-  const [id, setId] = useState(null);
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {weddingTemplates?.map((template) => (
-        <TemplateCard
-          key={template.id}
-          id={template.id}
-          template={template.content}
-          image={template.image}
-          setShowForm={setShowForm}
-          setId={setId}
-        />
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {weddingTemplates.map((template) => (
+        <TemplateCard key={template.id} template={template} />
       ))}
     </div>
   );
